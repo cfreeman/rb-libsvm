@@ -350,6 +350,20 @@ static VALUE cModel_predict(VALUE obj,VALUE example) {
   return rb_float_new(class);
 }
 
+static VALUE cModel_predict_values(VALUE obj,VALUE example) {
+  struct svm_node *x;
+  struct svm_model *model;
+  double class;
+
+  x = example_to_internal(example);
+  Data_Get_Struct(obj, struct svm_model, model);
+  svm_predict_values(model, x, &class);
+
+  free(x);
+
+  return rb_float_new(class);
+}
+
 static VALUE cModel_predict_probability(VALUE obj,VALUE example) {
   struct svm_node *x;
   struct svm_model *model;
